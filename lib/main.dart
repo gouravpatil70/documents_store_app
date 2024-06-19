@@ -1,4 +1,5 @@
 import 'package:documents_store_app/Screens/login_screen.dart';
+import 'package:documents_store_app/Screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
 void main(){
@@ -18,6 +19,12 @@ class MyApp extends StatelessWidget{
         useMaterial3: true
       ),
       home: const LoginScreen(),
+
+      // Defining routes
+      routes: <String,WidgetBuilder>{
+        '/loginScreen': (BuildContext context)=> const LoginScreen(),
+        '/regiserScreen': (BuildContext context)=> const RegisterScreen(),
+      },
     );
   }
 }
