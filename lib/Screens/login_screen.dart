@@ -43,10 +43,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
                   //  For Email
-                  const CustomTextFormField(validator: 'Please provide Email Id', icon: Icons.email_outlined, isPasswordField: false),
+                  const CustomTextFormField(validator: 'Please provide Email Id', labelText: 'Email Id', icon: Icons.email_outlined, isPasswordField: false),
               
                   // For Password
-                  const CustomTextFormField(validator: 'Please provide Password', icon: Icons.password_outlined, isPasswordField: true),
+                  const CustomTextFormField(validator: 'Please provide Password', labelText: 'Password', icon: Icons.password_outlined, isPasswordField: true),
               
                   // Register Button
                   Padding(

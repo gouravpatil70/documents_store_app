@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String validator;
+  final String labelText;
   final IconData icon;
   final bool isPasswordField;
-  const CustomTextFormField({super.key, required this.validator, required this.icon, required this.isPasswordField});
+  const CustomTextFormField({super.key, required this.validator, required this.labelText, required this.icon, required this.isPasswordField});
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -30,6 +31,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
+          labelText: widget.labelText,
           prefixIcon: Icon(widget.icon),          
           suffixIcon: widget.isPasswordField != false 
           ? GestureDetector(
