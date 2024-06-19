@@ -1,3 +1,4 @@
+import 'package:documents_store_app/Screens/home_screen.dart';
 import 'package:documents_store_app/Screens/login_screen.dart';
 import 'package:documents_store_app/Screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,10 @@ class MyApp extends StatelessWidget{
     return MaterialApp(
       title: 'Document Storing Applicaton',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true
       ),
-      home: const LoginScreen(),
+      home: const HomeScreen(),
 
       // Defining routes
       routes: <String,WidgetBuilder>{
