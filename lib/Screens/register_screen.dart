@@ -11,6 +11,13 @@ class RegisterScreen extends StatefulWidget{
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+
+  // Requried Variables & instances
+  final TextEditingController _editingNameController = TextEditingController();
+  final TextEditingController _editingEmailIdController = TextEditingController();
+  final TextEditingController _editingPasswordController = TextEditingController();
+  
+  
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -40,13 +47,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
 
                 // Name Field
-                const CustomTextFormField(validator: 'Please provide name', labelText: 'Name', icon: Icons.person_2_outlined, isPasswordField: false),
+                CustomTextFormField(validator: 'Please provide name', labelText: 'Name', icon: Icons.person_2_outlined, isPasswordField: false, editingController: _editingNameController, callBack: _onChangedNameValue),
 
                 // Email Field
-                const CustomTextFormField(validator: 'Please provide Email Id', labelText: 'Email Id', icon: Icons.mail_outline, isPasswordField: false),
+                CustomTextFormField(validator: 'Please provide Email Id', labelText: 'Email Id', icon: Icons.mail_outline, isPasswordField: false,editingController: _editingEmailIdController, callBack: _onChangedEmailIdValue),
 
                 // Password Field
-                const CustomTextFormField(validator: 'Please enter Password', labelText: 'Password', icon: Icons.password_outlined, isPasswordField: true),
+                CustomTextFormField(validator: 'Please enter Password', labelText: 'Password', icon: Icons.password_outlined, isPasswordField: true, editingController: _editingPasswordController, callBack: _onChangedPasswordValue),
 
                 // Register Button
                 CustomButton.customOutlinedButton(context: context, buttonText: 'Register Me'),
@@ -80,6 +87,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+
+  // For Name
+  _onChangedNameValue(String input){
+    setState(() {
+      _editingNameController.text = input;
+    });
+  }
+
+  // For EmailId
+  _onChangedEmailIdValue(String input){
+    setState(() {
+      _editingEmailIdController.text = input;
+    });
+  }
+  // For Password
+  _onChangedPasswordValue(String input){
+    setState(() {
+      _editingPasswordController.text = input;
+    });
+  }
 
   // Navigate to Login Screen
   _navigateToLoginScreen(){

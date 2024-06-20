@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:documents_store_app/Screens/home_screen.dart';
 import 'package:documents_store_app/Widgets/custom_alert_dialog.dart';
 import 'package:documents_store_app/Widgets/custom_app_bar.dart';
@@ -16,6 +15,9 @@ class UploadDocuments extends StatefulWidget {
 }
 
 class _UploadDocumentsState extends State<UploadDocuments> {
+
+  // Requried instances
+  final TextEditingController _editingDocumentNameController = TextEditingController();
 
   // Requried Variables
   File? _document;
@@ -35,7 +37,7 @@ class _UploadDocumentsState extends State<UploadDocuments> {
               children: [
             
                 // For Document Name
-                const CustomTextFormField(validator: 'Please provide document Name', labelText: 'Document Name', icon: Icons.edit_document, isPasswordField: false),
+                CustomTextFormField(validator: 'Please provide document Name', labelText: 'Document Name', icon: Icons.edit_document, isPasswordField: false,editingController: _editingDocumentNameController, callBack: _onChangedDocumentNameValue),
             
                 // Selecting document from the gallery
                 Padding(
@@ -91,6 +93,12 @@ class _UploadDocumentsState extends State<UploadDocuments> {
     );
   }
 
+
+  _onChangedDocumentNameValue(String input){
+    setState(() {
+      _editingDocumentNameController.text = input;
+    });
+  }
 
   // Selecting document from the gallery
   _pickFileFromStorage()async{

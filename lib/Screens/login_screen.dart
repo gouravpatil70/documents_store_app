@@ -12,7 +12,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
+  // Required Variables & instances
   final GlobalKey<FormState> _globakKey = GlobalKey();
+  final TextEditingController _editingEmailIdController = TextEditingController();
+  final TextEditingController _editingPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -43,10 +47,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
                   //  For Email
-                  const CustomTextFormField(validator: 'Please provide Email Id', labelText: 'Email Id', icon: Icons.email_outlined, isPasswordField: false),
+                  CustomTextFormField(validator: 'Please provide Email Id', labelText: 'Email Id', icon: Icons.email_outlined, isPasswordField: false, editingController: _editingEmailIdController, callBack: _onChangedNameValue),
               
                   // For Password
-                  const CustomTextFormField(validator: 'Please provide Password', labelText: 'Password', icon: Icons.password_outlined, isPasswordField: true),
+                  CustomTextFormField(validator: 'Please provide Password', labelText: 'Password', icon: Icons.password_outlined, isPasswordField: true, editingController: _editingPasswordController, callBack: _onChangedPasswordValue),
               
                   // Register Button
                   Padding(
@@ -84,8 +88,24 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // For Email Id
+  _onChangedNameValue(String input){
+    setState(() {
+      _editingEmailIdController.text = input;
+    });
+  }
+
+  // For Password
+  _onChangedPasswordValue(String input){
+    setState(() {
+      _editingPasswordController.text = input;
+    });
+  }
+
   // Navigate To Register User Screen
   _navigateToRegisterScreen(){
     Navigator.pushReplacementNamed(context, '/regiserScreen');
   }
+
+
 }
