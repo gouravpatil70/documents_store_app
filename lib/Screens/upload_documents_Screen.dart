@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:documents_store_app/Screens/home_screen.dart';
 import 'package:documents_store_app/Widgets/custom_alert_dialog.dart';
 import 'package:documents_store_app/Widgets/custom_app_bar.dart';
+import 'package:documents_store_app/Widgets/custom_button.dart';
 import 'package:documents_store_app/Widgets/custom_input_box.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -67,24 +68,7 @@ class _UploadDocumentsState extends State<UploadDocuments> {
                 ),
 
 
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                  child: ElevatedButton(
-                    onPressed: ()=>_uploadDocumentToDatabase(), 
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      backgroundColor: Colors.blue,
-                    ),
-                    child: const Text(
-                      'Upload',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    )
-                  ),
-                )
+                CustomButton.customElevatedButton(context: context, buttonText: 'Upload',callBack: _uploadDocumentToDatabase),
               ],
             ),
           ),

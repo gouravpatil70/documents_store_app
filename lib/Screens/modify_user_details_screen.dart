@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:documents_store_app/Screens/home_screen.dart';
+import 'package:documents_store_app/Widgets/custom_alert_dialog.dart';
 import 'package:documents_store_app/Widgets/custom_app_bar.dart';
 import 'package:documents_store_app/Widgets/custom_button.dart';
 import 'package:documents_store_app/Widgets/custom_input_box.dart';
@@ -41,7 +45,7 @@ class _ModifyUserDetailsState extends State<ModifyUserDetails> {
                   CustomTextFormField(validator: 'Please enter Passwrod', labelText: 'Password', icon: Icons.password_outlined, isPasswordField: true, editingController: _editingPasswordController,callBack: _onChangedPasswordValue),
 
                   // Modify Button 
-                  CustomButton.customElevatedButton(context: context, buttonText: 'Modify'),
+                  CustomButton.customElevatedButton(context: context, buttonText: 'Modify',callBack: _modifyUserDetailsCallBack),
                 ],
               ),
             ),
@@ -70,5 +74,24 @@ class _ModifyUserDetailsState extends State<ModifyUserDetails> {
     setState(() {
       _editingPasswordController.text = input;
     });
+  }
+
+  // Modify Details Button
+  _modifyUserDetailsCallBack()async{
+    bool resultOfAlertDialog = await CustomAlertDialog.customAelrtDialogBox(context: context, message: 'Details Modified');
+    if(resultOfAlertDialog){
+      Timer(const Duration(milliseconds: 500), (){ 
+        _navigateToHomeScreen();
+      });
+    }
+  }
+
+  // Navigate To Home Screen
+  _navigateToHomeScreen(){
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+      builder: (BuildContext context){
+        return HomeScreen();
+      }
+    ), (route) => false);
   }
 }
