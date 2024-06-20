@@ -16,9 +16,9 @@ class CustomButton{
     );
   }
 
-  static ElevatedButton customElevatedButton({required BuildContext context, required String buttonText}){
+  static ElevatedButton customElevatedButton({required BuildContext context, required String buttonText, required Function callBack}){
     return ElevatedButton(
-      onPressed: (){}, 
+      onPressed: ()=>callBack(), 
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.blue,
         shape: RoundedRectangleBorder(
