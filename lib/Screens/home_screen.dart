@@ -1,5 +1,6 @@
 import 'package:documents_store_app/Widgets/custom_app_bar.dart';
 import 'package:documents_store_app/Widgets/drawer_card_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -18,6 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: Drawer(
         child: Column(
           children: [
+
+            // Drawer element 1 : (Showing The Name & email Id Info)
             const UserAccountsDrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue,
@@ -30,8 +33,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'View Documents', cardIcon: Icons.file_copy_rounded),
+            // Drawer element 2 : (View Document)
+            GestureDetector(
+              child: DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'View Documents', cardIcon: Icons.file_copy_rounded),
+              onTap: (){
+                Navigator.pushNamed(context, '/viewDocument');
+              },
+            ),
 
+  
+            // Drawer element 3 : (Upload Document)
             GestureDetector(
               child: DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Upload Documents', cardIcon: Icons.upload_file_outlined),
               onTap: (){
@@ -39,8 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
+            // Drawer element 3 : (Modify Details)
             DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Modify Details', cardIcon: Icons.update),
 
+            // Drawer element 4 : (Log Out)
             DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Log Out', cardIcon: Icons.logout),
           ],
         ),
