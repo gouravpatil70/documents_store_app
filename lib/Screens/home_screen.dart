@@ -51,7 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // Drawer element 3 : (Modify Details)
-            DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Modify Details', cardIcon: Icons.update),
+            GestureDetector(
+              child: DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Modify Details', cardIcon: Icons.update),
+              onTap: (){
+                Navigator.pushNamed(context, '/modifyDetails');
+              },
+            ),
 
             // Drawer element 4 : (Log Out)
             DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Log Out', cardIcon: Icons.logout),
