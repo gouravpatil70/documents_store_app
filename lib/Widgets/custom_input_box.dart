@@ -6,7 +6,9 @@ class CustomTextFormField extends StatefulWidget {
   final String labelText;
   final IconData icon;
   final bool isPasswordField;
-  const CustomTextFormField({super.key, required this.validator, required this.labelText, required this.icon, required this.isPasswordField});
+  final TextEditingController editingController;
+  final Function(String) callBack;
+  const CustomTextFormField({super.key, required this.validator, required this.labelText, required this.icon, required this.isPasswordField, required this.editingController, required this.callBack});
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -21,6 +23,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: TextFormField(
+        controller: widget.editingController,
         validator: (input){
           if(input!.isEmpty){
             return widget.validator;
@@ -48,6 +51,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         ),
         obscureText: widget.isPasswordField != false ? isNotPasswordShow : widget.isPasswordField,
         obscuringCharacter: '*',
+        onChanged: (input)=>widget.callBack(input),
       ),
     );
   }
