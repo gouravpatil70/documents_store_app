@@ -15,4 +15,22 @@ class CustomButton{
       child: Text(buttonText)
     );
   }
+
+  static ElevatedButton customElevatedButton({required BuildContext context, required String buttonText}){
+    return ElevatedButton(
+      onPressed: (){}, 
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+      child: Text(
+        buttonText,
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      )
+    );
+  }
 }
