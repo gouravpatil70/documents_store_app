@@ -2,7 +2,7 @@ import 'package:documents_store_app/Screens/home_screen.dart';
 import 'package:documents_store_app/Screens/login_screen.dart';
 import 'package:documents_store_app/Screens/register_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:documents_store_app/Screens/upload_documents_screen.dart';
 void main(){
   runApp(const MyApp());
 }
@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget{
       routes: <String,WidgetBuilder>{
         '/loginScreen': (BuildContext context)=> const LoginScreen(),
         '/regiserScreen': (BuildContext context)=> const RegisterScreen(),
+        '/uploadDocument': (BuildContext context)=> const UploadDocuments(),
       },
     );
   }

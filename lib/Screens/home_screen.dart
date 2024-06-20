@@ -1,6 +1,7 @@
 import 'package:documents_store_app/Widgets/custom_app_bar.dart';
 import 'package:documents_store_app/Widgets/drawer_card_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,12 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
             DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'View Documents', cardIcon: Icons.file_copy_rounded),
 
-            DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Upload Documents', cardIcon: Icons.upload_file_outlined),
+            GestureDetector(
+              child: DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Upload Documents', cardIcon: Icons.upload_file_outlined),
+              onTap: (){
+                Navigator.pushNamed(context, '/uploadDocument');
+              },
+            ),
 
             DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Modify Details', cardIcon: Icons.update),
 
             DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Log Out', cardIcon: Icons.logout),
-            
           ],
         ),
       ),
