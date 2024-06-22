@@ -1,7 +1,11 @@
+import 'package:documents_store_app/Widgets/custom_alert_dialog.dart';
 import 'package:documents_store_app/Widgets/custom_app_bar.dart';
 import 'package:documents_store_app/Widgets/custom_button.dart';
 import 'package:documents_store_app/Widgets/custom_input_box.dart';
 import 'package:flutter/material.dart';
+
+// Firebase packages
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,9 +17,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
 
   // Required Variables & instances
-  final GlobalKey<FormState> _globakKey = GlobalKey();
+  final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _editingEmailIdController = TextEditingController();
   final TextEditingController _editingPasswordController = TextEditingController();
+
+  // Authentication Instance
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+  @override
+  void initState() {
+    super.initState();
+    checkAuthentication();
+  }
 
   @override
   Widget build(BuildContext context){
@@ -28,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
           margin: const EdgeInsets.all(10.0),
           child: SingleChildScrollView(
             child: Form(
-              key: _globakKey,
+              key: _formKey,
               child: Column(
                 children: [                  
 
@@ -55,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Register Button
                   Padding(
                     padding: const EdgeInsets.only(top: 15.0),
-                    child: CustomButton.customOutlinedButton(context: context, buttonText: 'Register')
+                    child: CustomButton.customOutlinedButton(context: context, buttonText: 'Register', callBack: _loginButtonCallBack),
                   ),
               
                   // Register new user 
@@ -88,17 +102,28 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // Check Authentication
+  checkAuthentication(){
+    _auth.authStateChanges().listen((user) { 
+      if(user != null){
+        if(mounted){
+          Navigator.pushReplacementNamed(context, '/');
+        }
+      }
+    });
+  }
+
   // For Email Id
   _onChangedNameValue(String input){
     setState(() {
-      _editingEmailIdController.text = input;
+      _editingEmailIdController.text = input.trim();
     });
   }
 
   // For Password
   _onChangedPasswordValue(String input){
     setState(() {
-      _editingPasswordController.text = input;
+      _editingPasswordController.text = input.trim();
     });
   }
 
@@ -107,5 +132,22 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushReplacementNamed(context, '/regiserScreen');
   }
 
+  // Login Button Functionality
+  _loginButtonCallBack()async{
+    if(_formKey.currentState!.validate()){
+      _formKey.currentState!.save();
+
+      try{
+        await _auth.signInWithEmailAndPassword(email: _editingEmailIdController.text, password: _editingPasswordController.text);
+      }catch(e){
+        _showErrorMessage(e.toString());
+      }
+    }
+  }
+
+  // Showing an Dialog Box
+  _showErrorMessage(String message){
+    CustomAlertDialog.customAelrtDialogBox(context: context, message: message);
+  }
 
 }
