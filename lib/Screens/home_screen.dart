@@ -1,7 +1,8 @@
+import 'package:documents_store_app/Screens/upload_documents_screen.dart';
 import 'package:documents_store_app/Widgets/custom_app_bar.dart';
 import 'package:documents_store_app/Widgets/drawer_card_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,10 +13,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  // Firebase Authentication Part
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    checkAuthentication();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.customAppBar(context: context, appTitle: 'Welcome, '),
+      appBar: CustomAppBar.customAppBar(context: context, appTitle: 'Welcome ${_user != null ? _user!.displayName : ''},'),
       drawer: Drawer(
         child: Column(
           children: [
@@ -46,7 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
             GestureDetector(
               child: DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Upload Documents', cardIcon: Icons.upload_file_outlined),
               onTap: (){
-                Navigator.pushNamed(context, '/uploadDocument');
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context){
+                    return UploadDocuments(user: _user!,);
+                  }
+                )
+                );
               },
             ),
 
@@ -59,7 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // Drawer element 4 : (Log Out)
-            DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Log Out', cardIcon: Icons.logout),
+            GestureDetector(
+              child: DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Log Out', cardIcon: Icons.logout),
+              onTap: (){
+                _auth.signOut();
+              },
+            ),
           ],
         ),
       ),
@@ -119,5 +141,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
+  // Checking Authtication 
+  checkAuthentication(){
+    _auth.authStateChanges().listen((user) { 
+      
+      if(user == null){
+        if(mounted){
+          Navigator.pushReplacementNamed(context, '/loginScreen');
+        }
+      }else{
+        if(mounted){
+          setState(() {
+            _user = user;
+            print(_user!.displayName);
+            print(_user);
+          });
+        }
+      }
+    });
+  }
 }
