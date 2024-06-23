@@ -113,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // For Name
   _onChangedNameValue(String input){
     setState(() {
-      _editingNameController.text = input.trim();
+      _editingNameController.text = input;
       // Storing data inside the UserDetailsModel
       _userDetailsObject.userName = input.trim();
     });
@@ -122,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // For EmailId
   _onChangedEmailIdValue(String input){
     setState(() {
-      _editingEmailIdController.text = input.trim();
+      _editingEmailIdController.text = input;
       // Storing data inside the UserDetailsModel
       _userDetailsObject.userEmailId = input.trim();
     });
@@ -130,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // For Password
   _onChangedPasswordValue(String input){
     setState(() {
-      _editingPasswordController.text = input.trim();
+      _editingPasswordController.text = input;
       // Storing data inside the UserDetailsModel
       _userDetailsObject.userPassword = input.trim();
     });
