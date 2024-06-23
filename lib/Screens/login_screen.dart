@@ -116,14 +116,14 @@ class _LoginScreenState extends State<LoginScreen> {
   // For Email Id
   _onChangedNameValue(String input){
     setState(() {
-      _editingEmailIdController.text = input.trim();
+      _editingEmailIdController.text = input;
     });
   }
 
   // For Password
   _onChangedPasswordValue(String input){
     setState(() {
-      _editingPasswordController.text = input.trim();
+      _editingPasswordController.text = input;
     });
   }
 
@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _formKey.currentState!.save();
 
       try{
-        await _auth.signInWithEmailAndPassword(email: _editingEmailIdController.text, password: _editingPasswordController.text);
+        await _auth.signInWithEmailAndPassword(email: (_editingEmailIdController.text).trim(), password: (_editingPasswordController.text).trim());
       }catch(e){
         _showErrorMessage(e.toString());
       }
