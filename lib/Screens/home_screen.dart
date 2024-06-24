@@ -1,4 +1,5 @@
 import 'package:documents_store_app/Screens/upload_documents_screen.dart';
+import 'package:documents_store_app/Screens/documents_list_screen.dart';
 import 'package:documents_store_app/Widgets/custom_app_bar.dart';
 import 'package:documents_store_app/Widgets/drawer_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,11 @@ class _HomeScreenState extends State<HomeScreen> {
             GestureDetector(
               child: DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'View Documents', cardIcon: Icons.file_copy_rounded),
               onTap: (){
-                Navigator.pushNamed(context, '/viewDocument');
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context){
+                    return ViewDocument(user: _user!);
+                  }
+                ));
               },
             ),
 
