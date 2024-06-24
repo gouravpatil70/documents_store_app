@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CustomButton{
-  static OutlinedButton customOutlinedButton({required BuildContext context, required String buttonText}){
+  static OutlinedButton customOutlinedButton({required BuildContext context, required String buttonText, required Function callBack}){
     return OutlinedButton(
-      onPressed: (){}, 
+      onPressed: ()=>callBack(),
       style: OutlinedButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
