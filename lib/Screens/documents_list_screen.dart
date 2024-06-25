@@ -94,28 +94,21 @@ class _ViewDocumentState extends State<ViewDocument> {
                           ),
                         
                           // Leading Icon
-                          leading: IconButton(
+                          leading: const Icon(
+                            Icons.file_open,
+                            color: Colors.grey,
+                            size: 28.0,
+                          ),
+                        
+                          // Trailing Icon
+                          trailing: 
+                          IconButton(
+                            tooltip: 'Delete from Cloud',
                             onPressed: (){},
                             icon: const Icon(
                               Icons.delete_forever_outlined,
                               color: Colors.red,
                               size: 30.0,
-                            ),
-                          ),
-                        
-                          // Trailing Icon
-                          trailing: IconButton(
-                            onPressed: (){
-                              downloadFile(url: _mapObject![(_mapObject!.keys).toList().asMap()[index]]['documentUrl'],fileName: (((_mapObject!.keys).toList())[index]));
-
-                              setState(() {
-                                _bottomIndexForProgressBar = index+1;
-                              });
-                            },
-                            icon: const Icon(
-                              Icons.file_download_outlined,
-                              color: Color.fromARGB(255, 18, 216, 61),
-                              size: 33.0,
                             ),
                           ),
                         
