@@ -33,8 +33,6 @@ class _ViewDocumentState extends State<ViewDocument> {
   bool? isLoading;
   bool isDownloading = false;
   double downloadProgress = 0.0;
-  // bool? isFileExist;
-  // bool? _isFileAvailable;
   int? _bottomIndexForProgressBar;
 
   // Dio instance
@@ -77,11 +75,12 @@ class _ViewDocumentState extends State<ViewDocument> {
                   padding: const EdgeInsets.only(left: 10.0, right: 10.0,bottom: 7.0),
                   child: Card(
                     elevation: 2.5,
-                    shadowColor: Colors.black,
+                    shadowColor: Colors.blue,
                     child: Column(
                       children: [
                         ListTile(
-                          tileColor: const Color.fromARGB(255, 230, 234, 237),
+                          // tileColor: const Color.fromARGB(255, 230, 234, 237),
+                          tileColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
