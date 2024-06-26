@@ -61,10 +61,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
                   //  For Email
-                  CustomTextFormField(validator: 'Please provide Email Id', labelText: 'Email Id', icon: Icons.email_outlined, isPasswordField: false, editingController: _editingEmailIdController, callBack: _onChangedNameValue),
+                  CustomTextFormField(validator: 'Please provide Email Id', isInputBoxEnabled: true, labelText: 'Email Id', icon: Icons.email_outlined, isPasswordField: false, editingController: _editingEmailIdController, callBack: _onChangedNameValue),
               
                   // For Password
-                  CustomTextFormField(validator: 'Please provide Password', labelText: 'Password', icon: Icons.password_outlined, isPasswordField: true, editingController: _editingPasswordController, callBack: _onChangedPasswordValue),
+                  CustomTextFormField(validator: 'Please provide Password', isInputBoxEnabled: true, labelText: 'Password', icon: Icons.password_outlined, isPasswordField: true, editingController: _editingPasswordController, callBack: _onChangedPasswordValue),
               
                   // Register Button
                   Padding(
