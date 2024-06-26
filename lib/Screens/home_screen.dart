@@ -1,10 +1,15 @@
+import 'dart:async';
+
+import 'package:documents_store_app/Screens/modify_user_details_screen.dart';
 import 'package:documents_store_app/Screens/upload_documents_screen.dart';
 import 'package:documents_store_app/Screens/documents_list_screen.dart';
+import 'package:documents_store_app/Widgets/custom_alert_dialog.dart';
 import 'package:documents_store_app/Widgets/custom_app_bar.dart';
 import 'package:documents_store_app/Widgets/drawer_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -76,7 +81,11 @@ class _HomeScreenState extends State<HomeScreen> {
             GestureDetector(
               child: DrawerCardChildren.customDrawerCardWidget(context: context, cardTitle: 'Modify Details', cardIcon: Icons.update),
               onTap: (){
-                Navigator.pushNamed(context, '/modifyDetails');
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context){
+                    return ModifyUserDetails(user: _user!);
+                  })
+                );
               },
             ),
 
@@ -161,8 +170,33 @@ class _HomeScreenState extends State<HomeScreen> {
             print(_user!.displayName);
             print(_user);
           });
+          Timer(const Duration(seconds: 2),(() {
+            checkAndAskStoragePermission();
+          }));
         }
       }
     });
+  }
+
+
+  checkAndAskStoragePermission()async{
+    if(await _showDialogBoxForPermission('This app needs the storage permission')){
+      Permission permission = Permission.manageExternalStorage;
+      if(await permission.isGranted){
+        return true;
+      }else{
+        PermissionStatus permissionAccessResult = await permission.request();
+        if(permissionAccessResult.isGranted){
+          return true;
+        }else if(permissionAccessResult.isDenied){
+          checkAndAskStoragePermission();
+        }
+      }
+    }
+  }
+
+  _showDialogBoxForPermission(String message){
+    Future<dynamic> result = CustomAlertDialog.customAelrtDialogBox(context: context, message: message);
+    return result;
   }
 }
