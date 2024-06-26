@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String validator;
+  final bool isInputBoxEnabled;
   final String labelText;
   final IconData icon;
   final bool isPasswordField;
   final TextEditingController editingController;
   final Function(String) callBack;
-  const CustomTextFormField({super.key, required this.validator, required this.labelText, required this.icon, required this.isPasswordField, required this.editingController, required this.callBack});
+  const CustomTextFormField({super.key, required this.validator, required this.isInputBoxEnabled, required this.labelText, required this.icon, required this.isPasswordField, required this.editingController, required this.callBack});
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -31,6 +32,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           return null;
         },
         decoration: InputDecoration(
+          enabled: widget.isInputBoxEnabled,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
