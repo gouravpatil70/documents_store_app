@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 // Firebase Packages
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ViewDocument extends StatefulWidget {
   final User user;
@@ -21,16 +20,16 @@ class ViewDocument extends StatefulWidget {
 class _ViewDocumentState extends State<ViewDocument> {
 
 
-  // Firebase Connectivity
+  // Firestore instance
   final FirebaseFirestore _cloudStorage = FirebaseFirestore.instance;
+
+  // Firebase Storage Instance
+  final Reference  _firebaseStorage = FirebaseStorage.instance.ref();
 
   // Map object for storing data.
   Map<String,dynamic>? _mapObject;
   bool? isLoading;
   bool isDownloading = false;
-
-  // Dio instance
-  final Dio dio = Dio();
 
   @override
   void initState() {
@@ -96,7 +95,7 @@ class _ViewDocumentState extends State<ViewDocument> {
                           trailing: 
                           IconButton(
                             tooltip: 'Delete from Cloud',
-                            onPressed: (){},
+                            onPressed: ()=>_deleteFileFromCloudStorage(id: ((_mapObject!.keys).toList())[index]),
                             icon: const Icon(
                               Icons.delete_forever_outlined,
                               color: Colors.red,
@@ -120,9 +119,10 @@ class _ViewDocumentState extends State<ViewDocument> {
 
   // Getting the data from the firestore.
   getDocumentsOfTheUser()async{
-    // Getting the all documents from the `document` collection
+  // Getting the all documents from the `document` collection
+    
     var documentCollection = _cloudStorage.collection('userDetails').doc(widget.user.email).collection('documents');
-    documentCollection.get().then((snapshot){
+    await documentCollection.get().then((snapshot){
       for(var snapshotData in snapshot.docs){
         _mapObject![snapshotData.id] = snapshotData.data();
       }
@@ -145,8 +145,26 @@ class _ViewDocumentState extends State<ViewDocument> {
     );
   }
 
-  _deleteFileFromCloudStorage(){
-    _showDialogBox('File Deleted from Cloud Storage');
+  _deleteFileFromCloudStorage({required String id})async{
+    try{
+
+      // Deleting file from the firestore database 
+      await _cloudStorage.collection('userDetails').doc(widget.user.email).collection('documents').doc(id).delete();
+      
+      // Also delete the file from the firebase storage (where the files are stored)
+      await _firebaseStorage.child(id).delete();
+      
+      await getDocumentsOfTheUser();
+
+      await _showDialogBox('File Deleted from Cloud Storage');
+
+      // Not updating the UI part of the screen.
+
+      // Calling the method again for uplading the _mapObject so that UI can update.
+    }catch(e){
+      _showDialogBox(e.toString());
+    }
+    // print(_mapObject);
   }
 
 
