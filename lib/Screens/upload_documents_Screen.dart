@@ -59,7 +59,7 @@ class _UploadDocumentsState extends State<UploadDocuments> {
                 children: [
               
                   // For Document Name
-                  CustomTextFormField(validator: 'Please provide document Name', labelText: 'Document Name', icon: Icons.edit_document, isPasswordField: false,editingController: _editingDocumentNameController, callBack: _onChangedDocumentNameValue),
+                  CustomTextFormField(validator: 'Please provide document Name', isInputBoxEnabled: true, labelText: 'Document Name', icon: Icons.edit_document, isPasswordField: false,editingController: _editingDocumentNameController, callBack: _onChangedDocumentNameValue),
               
                   // Selecting document from the gallery
                   Padding(
