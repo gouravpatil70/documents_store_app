@@ -68,13 +68,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
             
                   // Name Field
-                  CustomTextFormField(validator: 'Please provide name', labelText: 'Name', icon: Icons.person_2_outlined, isPasswordField: false, editingController: _editingNameController, callBack: _onChangedNameValue),
+                  CustomTextFormField(validator: 'Please provide name', isInputBoxEnabled: true, labelText: 'Name', icon: Icons.person_2_outlined, isPasswordField: false, editingController: _editingNameController, callBack: _onChangedNameValue),
             
                   // Email Field
-                  CustomTextFormField(validator: 'Please provide Email Id', labelText: 'Email Id', icon: Icons.mail_outline, isPasswordField: false,editingController: _editingEmailIdController, callBack: _onChangedEmailIdValue),
+                  CustomTextFormField(validator: 'Please provide Email Id', isInputBoxEnabled: true, labelText: 'Email Id', icon: Icons.mail_outline, isPasswordField: false,editingController: _editingEmailIdController, callBack: _onChangedEmailIdValue),
             
                   // Password Field
-                  CustomTextFormField(validator: 'Please enter Password', labelText: 'Password', icon: Icons.password_outlined, isPasswordField: true, editingController: _editingPasswordController, callBack: _onChangedPasswordValue),
+                  CustomTextFormField(validator: 'Please enter Password', isInputBoxEnabled: true, labelText: 'Password', icon: Icons.password_outlined, isPasswordField: true, editingController: _editingPasswordController, callBack: _onChangedPasswordValue),
             
                   // Register Button
                   CustomButton.customOutlinedButton(context: context, buttonText: 'Register Me', callBack: _registerButtonCallBack),
