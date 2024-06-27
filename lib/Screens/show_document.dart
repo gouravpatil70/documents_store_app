@@ -1,13 +1,23 @@
+// Imput & Output operations
 import 'dart:io';
 
+// Widgets custom package
 import 'package:documents_store_app/Widgets/custom_alert_dialog.dart';
+
+// Material Package
 import 'package:flutter/material.dart';
+
+// For opening the file
 import 'package:open_file/open_file.dart';
+
+// For getting the application directory path
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 // File Downloader
 import 'package:dio/dio.dart';
+
+// For File Sharing 
+import 'package:share_plus/share_plus.dart';
 
 class ShowDocument extends StatefulWidget {
   final Map<String,dynamic> documentDetails;
@@ -132,7 +142,10 @@ class _ShowDocumentState extends State<ShowDocument> {
             : const SizedBox(),
 
             _isFileExist != false 
-            ? customListTile(message: 'Share File', trailingIcon: Icons.ios_share, iconColor: Colors.blue,isProgressShow: false)
+            ? GestureDetector(
+                child: customListTile(message: 'Share File', trailingIcon: Icons.ios_share, iconColor: Colors.blue,isProgressShow: false),
+                onTap: ()=> _shareFileWithOtherApplications(),
+              )
             : const SizedBox(),
 
             _isFileExist != false 
@@ -241,6 +254,12 @@ class _ShowDocumentState extends State<ShowDocument> {
     OpenFile.open(file.path);
   }
 
+  _shareFileWithOtherApplications()async{
+    File file = File('${_localDirectory!.path}/$fileName');
+    List<XFile> filesList = [XFile(file.path)];
+    Share.shareXFiles(filesList, text:"Check out this file !!");
+  }
+
   // Delete File from local Storage
   _deleteFileFromLocalStorage()async{
     File file = File('${_localDirectory!.path}/$fileName');
@@ -279,16 +298,8 @@ class _ShowDocumentState extends State<ShowDocument> {
 
     if(Platform.isAndroid){
       try{
-        if(await _requiredForStoragePermission(Permission.manageExternalStorage)){
-          
-          directory = await getExternalStorageDirectory();
-          directory = _gettingTheFileDirectoryForStorage(directory);
-
-          // print(directory!.path);
-        }else{
-          _showErrorMessage('Permission Denied');
-        }
-
+        directory = await getExternalStorageDirectory();
+        directory = _gettingTheFileDirectoryForStorage(directory);
       }catch(e){
         _showErrorMessage(e.toString());
       }
@@ -323,21 +334,6 @@ class _ShowDocumentState extends State<ShowDocument> {
     directory = Directory('$newFilePath/Android/DocumentStoreApp');
     return directory;
   }
-
-  // Requesting the storage permission.
-  Future<bool> _requiredForStoragePermission(Permission permission)async{
-    if(await permission.isGranted){
-      return true;
-    }else{
-      PermissionStatus result = await permission.request();
-      if(result.isGranted){
-        return true;
-      }else{
-        return false;
-      }
-    }
-  }
-
 
   // Showing An error message
   _showErrorMessage(String message){
