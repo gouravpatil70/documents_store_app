@@ -140,7 +140,7 @@ class _ViewDocumentState extends State<ViewDocument> {
     mapObject[mapObjectKey] = mapObjectValue;
     Navigator.push(context, MaterialPageRoute(
       builder: (BuildContext context){
-        return ShowDocument(documentDetails: mapObject);
+        return ShowDocument(documentDetails: mapObject, user: widget.user,);
       })
     );
   }
