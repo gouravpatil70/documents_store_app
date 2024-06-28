@@ -4,6 +4,7 @@ import 'dart:io';
 // Widgets custom package
 import 'package:documents_store_app/Widgets/custom_alert_dialog.dart';
 
+
 // Material Package
 import 'package:flutter/material.dart';
 
@@ -19,9 +20,14 @@ import 'package:dio/dio.dart';
 // For File Sharing 
 import 'package:share_plus/share_plus.dart';
 
+// Database Storage
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 class ShowDocument extends StatefulWidget {
   final Map<String,dynamic> documentDetails;
-  const ShowDocument({super.key, required this.documentDetails});
+  final User user;
+  const ShowDocument({super.key, required this.user, required this.documentDetails});
 
   @override
   State<ShowDocument> createState() => _ShowDocumentState();
@@ -34,6 +40,7 @@ class _ShowDocumentState extends State<ShowDocument> {
   String? fileUrl;
   String? fileTitle;
   IconData? displayIcon;
+  int? numberOfDoc;
 
   // Dio instance
   final Dio dio = Dio();
@@ -42,6 +49,9 @@ class _ShowDocumentState extends State<ShowDocument> {
   double? _fileDownloadedProgress;
   bool? _isFileExist;
   Directory? _localDirectory;
+
+  // Firestore instance
+  final FirebaseFirestore  _cloudFirestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -52,6 +62,7 @@ class _ShowDocumentState extends State<ShowDocument> {
     checkExtention();
     _fileDownloadedProgress = 0.0;
     _isFileExist = false;
+    numberOfDoc = 0;
     _checkFileExistOrNot(fileName: fileName!);
   }
 
@@ -229,9 +240,16 @@ class _ShowDocumentState extends State<ShowDocument> {
     try{
       directory = await getExternalStorageDirectory();
       directory = _gettingTheFileDirectoryForStorage(directory);
-      setState(() {
-        _localDirectory = directory;
-      });
+      if(await directory!.exists()){
+        setState(() {
+          _localDirectory = directory;
+        });
+      }else{
+        setState(() {
+          directory!.create(recursive: true);
+          _localDirectory = directory;
+        });
+      }
       File file =  File('${directory!.path}/$fileName');
       if(await file.exists()){
         setState(() {
@@ -249,9 +267,38 @@ class _ShowDocumentState extends State<ShowDocument> {
   }
 
   // OpenFile
-  _openFileFromLocalStorage(){
+  _openFileFromLocalStorage()async{
     File file = File('${_localDirectory!.path}/$fileName');
     OpenFile.open(file.path);
+
+    // then Store it into the database.
+    var resultOfRecentDoc = _cloudFirestore.collection('userDetails').doc(widget.user.email).collection('recentOpenedDocuments');
+
+    var resultOfUserDetails = _cloudFirestore.collection('userDetails').doc(widget.user.email);
+    await resultOfRecentDoc.get().then((value)async{
+      numberOfDoc = (value.docs).length;
+      if(numberOfDoc! >= 5){
+
+        // Getting the last updated document
+        var dataSnapshot = await resultOfUserDetails.get();
+        var resultOfData = dataSnapshot.data() as Map<String,dynamic>;
+        int lastUpdatedDoc = int.parse(resultOfData['lastUpdatedDoc']);
+        if(lastUpdatedDoc>=5){
+          lastUpdatedDoc = 0;
+        }
+        resultOfRecentDoc.doc((lastUpdatedDoc+1).toString()).update({'docId':fileName!});
+        lastUpdatedDoc += 1;
+
+        // print(lastUpdatedDoc);
+
+        // Updating the last updated document into user data
+        resultOfUserDetails.update({'lastUpdatedDoc':(lastUpdatedDoc).toString()});
+      }else{
+        resultOfUserDetails.update({'lastUpdatedDoc':(numberOfDoc!+1).toString()});
+        resultOfRecentDoc.doc((numberOfDoc!+1).toString()).set({'docId':fileName!});
+      }
+    });
+
   }
 
   _shareFileWithOtherApplications()async{
@@ -293,20 +340,9 @@ class _ShowDocumentState extends State<ShowDocument> {
 
   // Saving File to Local Storage from Firebase Url
   Future<String> _saveFileToLocalStorage({required String fileUrl, required String fileName})async{
-
-    Directory? directory;
-
-    if(Platform.isAndroid){
-      try{
-        directory = await getExternalStorageDirectory();
-        directory = _gettingTheFileDirectoryForStorage(directory);
-      }catch(e){
-        _showErrorMessage(e.toString());
-      }
-    }
     
-    if(await directory!.exists()){
-      File file = File('${directory.path}/$fileName');
+    if(await _localDirectory!.exists()){
+      File file = File('${_localDirectory!.path}/$fileName');
       await dio.download(fileUrl, file.path,onReceiveProgress: (fileDownloaded, totalSize){
         setState(() {
           _fileDownloadedProgress = fileDownloaded / totalSize;
@@ -314,7 +350,7 @@ class _ShowDocumentState extends State<ShowDocument> {
       });
       return "File Downloaded Successfully";
     }else{
-      directory.create(recursive: true);
+      _localDirectory!.create(recursive: true);
     }
     return "File Not Downloaded";
   }
