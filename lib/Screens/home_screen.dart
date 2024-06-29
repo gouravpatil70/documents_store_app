@@ -224,8 +224,8 @@ class _HomeScreenState extends State<HomeScreen> {
         if(mounted){
           setState((){
             _user = user;
-            print(_user!.displayName);
-            print(_user);
+            // print(_user!.displayName);
+            // print(_user);
           });
           Timer(const Duration(seconds: 2),(()async{
             await checkAndAskStoragePermission();
@@ -262,11 +262,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _checkRecentlyOpenedDocuments()async{
     var result = _cloudFirestore.collection('userDetails').doc(_user!.email);
-    int index=0;
     Map<String,dynamic> mapObject = {};
     result.collection('recentOpenedDocuments').doc('documents').get().then((value){
       mapObject = value.data() as Map<String,dynamic>;
-      print(mapObject.runtimeType);
+      // print(mapObject.runtimeType);
       // print(mapObject);
       setState(() {
         _recentDocuments = mapObject;
