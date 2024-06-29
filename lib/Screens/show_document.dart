@@ -250,7 +250,7 @@ class _ShowDocumentState extends State<ShowDocument> {
           _localDirectory = directory;
         });
       }
-      File file =  File('${directory!.path}/$fileName');
+      File file =  File('${directory.path}/$fileName');
       if(await file.exists()){
         setState(() {
           _isFileExist = true;
