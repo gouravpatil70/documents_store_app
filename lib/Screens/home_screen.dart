@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   User? _user;
 
   // Required Variables
-  Map<int,dynamic>? _recentDocuments;
+  Map<String,dynamic>? _recentDocuments;
 
   // Firestore Package
   final FirebaseFirestore _cloudFirestore = FirebaseFirestore.instance;
@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: 220.0,
                                   child: Text(
-                                    _recentDocuments![index]['docId'],
+                                    _recentDocuments![(index+1).toString()],
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 18.0
@@ -200,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       onTap: (){
-                        _getDocumentDetails(id: _recentDocuments![index]['docId']);
+                        _getDocumentDetails(id: _recentDocuments![(index+1).toString()]);
                       },
                     );
                 }
@@ -263,16 +263,16 @@ class _HomeScreenState extends State<HomeScreen> {
   _checkRecentlyOpenedDocuments()async{
     var result = _cloudFirestore.collection('userDetails').doc(_user!.email);
     int index=0;
-    Map<int,dynamic> mapObject = {};
-    result.collection('recentOpenedDocuments').get().then((value){
-      for(var item in value.docs){
-        mapObject[index] = item.data();
-        index++;
-      }
+    Map<String,dynamic> mapObject = {};
+    result.collection('recentOpenedDocuments').doc('documents').get().then((value){
+      mapObject = value.data() as Map<String,dynamic>;
+      print(mapObject.runtimeType);
+      // print(mapObject);
       setState(() {
         _recentDocuments = mapObject;
       });
     });
+      
   }
 
   _getDocumentDetails({required String id})async{
