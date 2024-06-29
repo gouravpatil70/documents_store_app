@@ -271,31 +271,37 @@ class _ShowDocumentState extends State<ShowDocument> {
     File file = File('${_localDirectory!.path}/$fileName');
     OpenFile.open(file.path);
 
-    // then Store it into the database.
-    var resultOfRecentDoc = _cloudFirestore.collection('userDetails').doc(widget.user.email).collection('recentOpenedDocuments');
+    // Getting the result for the recentOpenedDocuments.
+    var resultOfRecentDoc = _cloudFirestore.collection('userDetails').doc(widget.user.email).collection('recentOpenedDocuments').doc('documents');
 
+    // Getting the result for the userDetails
     var resultOfUserDetails = _cloudFirestore.collection('userDetails').doc(widget.user.email);
+
     await resultOfRecentDoc.get().then((value)async{
-      numberOfDoc = (value.docs).length;
-      if(numberOfDoc! >= 5){
+      int numberOfDoc = value.data()!.length;
+      Map<String,dynamic> documents = value.data() as Map<String,dynamic>;
 
-        // Getting the last updated document
+      if(numberOfDoc >= 5){
         var dataSnapshot = await resultOfUserDetails.get();
-        var resultOfData = dataSnapshot.data() as Map<String,dynamic>;
-        int lastUpdatedDoc = int.parse(resultOfData['lastUpdatedDoc']);
-        if(lastUpdatedDoc>=5){
-          lastUpdatedDoc = 0;
+        int lastUpdatedDoc = dataSnapshot.data()!['lastUpdatedDoc'];
+
+        // If the documents is not present inside the database or inside the map object
+        if(! (documents.values).contains(fileName)){
+          if(lastUpdatedDoc >= 5){
+            lastUpdatedDoc = 0;
+          }
+
+          lastUpdatedDoc++;   // Updating the last updated doc
+          resultOfRecentDoc.update({lastUpdatedDoc.toString() : fileName}); // Updating the recent Opened document
+          resultOfUserDetails.update({'lastUpdatedDoc':lastUpdatedDoc});  // Updating last updated document
         }
-        resultOfRecentDoc.doc((lastUpdatedDoc+1).toString()).update({'docId':fileName!});
-        lastUpdatedDoc += 1;
-
-        // print(lastUpdatedDoc);
-
-        // Updating the last updated document into user data
-        resultOfUserDetails.update({'lastUpdatedDoc':(lastUpdatedDoc).toString()});
       }else{
-        resultOfUserDetails.update({'lastUpdatedDoc':(numberOfDoc!+1).toString()});
-        resultOfRecentDoc.doc((numberOfDoc!+1).toString()).set({'docId':fileName!});
+
+        if(! (documents.values).contains(fileName)){
+          resultOfRecentDoc.update({(numberOfDoc+1).toString(): fileName});
+          print(numberOfDoc);
+          resultOfUserDetails.update({'lastUpdatedDoc':numberOfDoc+1});
+        }
       }
     });
 
